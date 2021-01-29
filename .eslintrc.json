@@ -12,13 +12,16 @@
     "react"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "@typescript-eslint/consistent-type=definitions": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-var": "error"
+    "react/jsx-uses-react": 1,
+    "react/jsx-uses-vars": 1
   }
 }
