@@ -5,6 +5,7 @@
   "author": "Gabriel Resende <gabriel.resende06@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@testing-library/react": "^11.2.3",
     "@types/axios": "^0.14.0",
     "@types/faker": "^5.1.5",
     "@types/jest": "^26.0.20",
