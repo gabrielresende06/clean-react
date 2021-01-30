@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from './spinner.scss'
+import Styles from './spinner-styles.scss'
 
 type Props = React.HTMLAttributes<HTMLElement>
 

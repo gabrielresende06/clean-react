@@ -18,7 +18,7 @@ input[type="email"] {
   line-height: 40px;
   border-radius: 4px;
 
-  padding: 0px 40px 0px 8px;
+  padding: 0 40px 0 8px;
 
   &:focus {
     outline-color: $primaryLight;
@@ -44,23 +44,6 @@ button {
   height: 100vh;
   justify-content: space-between;
 
-  .header {
-    background-color: $primary;
-    display: flex;
-    flex-direction: column;
-    border-top: 40px solid $primaryDark;
-    align-items: center;
-
-    img {
-      margin-top: 40px;
-    }
-
-    h1 {
-      color: $white;
-      margin: 16px 0px 40px;
-    }
-  }
-
   .form {
     display: flex;
     flex-direction: column;
@@ -69,7 +52,7 @@ button {
     padding: 40px;
     border-radius: 8px;
     align-self: center;
-    box-shadow: 0px 1px 3px -1px $black;
+    box-shadow: 0 1px 3px -1px $black;
 
     h2 {
       color: $primaryDark;
@@ -130,8 +113,5 @@ button {
     }
   }
 
-  .footer {
-    background-color: $primary;
-    height: 48px;
-  }
+
 }
