@@ -23,11 +23,6 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.ts(x?)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
-      },
-      {
         test: /\.scss$/,
         use: [
           {
