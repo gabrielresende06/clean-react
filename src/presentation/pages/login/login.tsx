@@ -3,14 +3,18 @@ import Styles from './login-styles.scss'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 
-type State = {
+export type LoginState = {
   isLoading: boolean
-  errorMessage: string
+  errors?: {
+    message?: string
+    email?: string
+    password?: string
+  }
 }
 
 type Action = { type: string }
 
-const reducer = (state: State, action: Action): State => {
+const reducer = (state: LoginState, action: Action): LoginState => {
   switch (action.type) {
     default:
       return state
@@ -18,7 +22,14 @@ const reducer = (state: State, action: Action): State => {
 }
 
 const Login: React.FC = () => {
-  const [state] = useReducer(reducer, { isLoading: false, errorMessage: '' })
+  const [state] = useReducer(reducer, {
+    isLoading: false,
+    errors: {
+      message: '',
+      email: 'Campo obrigatório',
+      password: 'Campo obrigatório'
+    }
+  })
 
   return (
     <div className={Styles.login}>
