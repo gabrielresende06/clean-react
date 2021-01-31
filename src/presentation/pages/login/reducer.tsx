@@ -1,7 +1,7 @@
 import { State } from '@/presentation/types'
 
 export type Action =
-    { type: 'email' | 'password' | 'errorEmail' | 'errorPassword', value: string } |
+    { type: 'email' | 'password' | 'errorEmail' | 'errorPassword' | 'setMessage', value: string } |
     { type: 'setLoading', bool: boolean }
 
 const reducer = (state: State, action: Action): State => {
@@ -25,6 +25,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         errors: { ...state.errors, password: action.value }
+      }
+    case 'setMessage':
+      return {
+        ...state,
+        errors: { ...state.errors, message: action.value }
       }
     case 'setLoading':
       return {
