@@ -31,11 +31,16 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     dispatch({ type: 'errorPassword', value: validation.validate('password', state.password) })
   }, [state.password])
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    dispatch({ type: 'setLoading', bool: true })
+  }
+
   return (
     <div className={Styles.login}>
         <Header />
         <Context.Provider value={{ state, dispatch }}>
-            <form className={Styles.form}>
+            <form className={Styles.form} onSubmit={handleSubmit}>
                 <h2>Login</h2>
 
                 <Input type="email" name="email" placeholder="Digite seu e-mail" />

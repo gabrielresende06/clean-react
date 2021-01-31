@@ -1,6 +1,8 @@
 import { State } from '@/presentation/types'
 
-export type Action = { type: string, value: string }
+export type Action =
+    { type: 'email' | 'password' | 'errorEmail' | 'errorPassword', value: string } |
+    { type: 'setLoading', bool: boolean }
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -23,6 +25,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         errors: { ...state.errors, password: action.value }
+      }
+    case 'setLoading':
+      return {
+        ...state,
+        isLoading: action?.bool
       }
     default:
       return state
