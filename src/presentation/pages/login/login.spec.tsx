@@ -1,13 +1,27 @@
 import React from 'react'
+import faker from 'faker'
 import '@testing-library/jest-dom'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
 import { ValidationStub } from '@/presentation/test'
-import faker from 'faker'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel | undefined> {
+    this.params = params
+    return this.account
+  }
+}
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
+  authenticationSpy: AuthenticationSpy
 }
 
 type SutParams = {
@@ -16,11 +30,13 @@ type SutParams = {
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
+  const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} />)
+  const sut = render(<Login validation={validationStub} authentication={authenticationSpy} />)
   return {
     sut,
-    validationStub: validationStub
+    validationStub,
+    authenticationSpy
   }
 }
 
@@ -140,5 +156,25 @@ describe('Login Component', () => {
 
     const spinner = screen.getByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call Authentication with corre values', () => {
+    const { authenticationSpy } = makeSut()
+
+    const password = faker.internet.password()
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: password } })
+
+    const email = faker.internet.email()
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: email } })
+
+    const submitButton = screen.getByTestId('submit')
+    fireEvent.click(submitButton)
+
+    expect(authenticationSpy.params).toEqual({
+      email,
+      password
+    })
   })
 })
