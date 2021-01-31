@@ -24,12 +24,10 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   })
 
   useEffect(() => {
-    console.log(state.email)
     dispatch({ type: 'errorEmail', value: validation.validate('email', state.email) })
   }, [state.email])
 
   useEffect(() => {
-    console.log(state.password)
     dispatch({ type: 'errorPassword', value: validation.validate('password', state.password) })
   }, [state.password])
 
@@ -49,7 +47,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
                 <Input type="email" name="email" placeholder="Digite seu e-mail" />
                 <Input type="password" name="password" placeholder="Digite sua senha" />
 
-                <button data-testid='submit' disabled={!!state.errors.email || !!state.errors.password} className={Styles.submit} type="submit">Entrar</button>
+                <button data-testid='submit' disabled={!!state.errors.email || !!state.errors.password || state.isLoading} className={Styles.submit} type="submit">Entrar</button>
                 <span className={Styles.link}>
                     Criar Conta
                 </span>
