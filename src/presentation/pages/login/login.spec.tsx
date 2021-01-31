@@ -79,4 +79,16 @@ describe('Login Component', () => {
     expect(passwordStatus).toHaveProperty('title', validationStub.errorMessage)
     expect(passwordStatus).toHaveTextContent('🔴')
   })
+
+  test('Should show valid password state if Validation succeeds', () => {
+    const { validationStub } = makeSut()
+    validationStub.errorMessage = null
+
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: faker.internet.password() } })
+
+    const passwordStatus = screen.getByTestId('password-status')
+    expect(passwordStatus).toHaveProperty('title', 'Tudo certo!')
+    expect(passwordStatus).toHaveTextContent('🟢')
+  })
 })
