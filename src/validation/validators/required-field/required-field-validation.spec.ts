@@ -14,6 +14,6 @@ describe('Required Field Validation', () => {
   test('Should return false if field is not empty', () => {
     const sut = makeSut()
     const error = sut.validate(faker.random.word())
-    expect(error).toBe(false)
+    expect(error).toBeFalsy()
   })
 })
