@@ -17,7 +17,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
     errors: {
       message: '',
       email: '',
-      password: 'Campo obrigatório'
+      password: ''
     }
   })
 
@@ -28,7 +28,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
 
   useEffect(() => {
     console.log(state.password)
-    validation.validate('password', state.password)
+    dispatch({ type: 'errorPassword', value: validation.validate('password', state.password) })
   }, [state.password])
 
   return (
