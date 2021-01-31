@@ -1,6 +1,7 @@
 import React from 'react'
 import faker from 'faker'
 import '@testing-library/jest-dom'
+import 'jest-localstorage-mock'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
@@ -185,5 +186,17 @@ describe('Login Component', () => {
 
     const errorWrapper = screen.getByTestId('error-wrap')
     expect(errorWrapper.childElementCount).toBe(1)
+  })
+
+  test('Should add access token to localstorage on success', async () => {
+    const { authenticationSpy } = makeSut()
+
+    initializationInput('email')
+    initializationInput('password')
+
+    const submitButton = screen.getByTestId('submit')
+    await fireEvent.click(submitButton)
+
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
   })
 })
