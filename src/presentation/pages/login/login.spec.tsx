@@ -155,4 +155,16 @@ describe('Login Component', () => {
 
     expect(authenticationSpy.callsCount).toBe(1)
   })
+
+  test('Should not call Authentication if form is invalid', () => {
+    const validationError = faker.random.words()
+    const { authenticationSpy } = makeSut({ validationError })
+
+    initializationInput('email')
+
+    const form = screen.getByTestId('form')
+    fireEvent.submit(form)
+
+    expect(authenticationSpy.callsCount).toBe(0)
+  })
 })
