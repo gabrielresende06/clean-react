@@ -1,11 +1,23 @@
 import React from 'react'
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { render, RenderResult, screen } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
+
+type SutTypes = {
+  sut: RenderResult
+}
+
+const makeSut = (): SutTypes => {
+  const sut = render(<Login />)
+  return {
+    sut
+  }
+}
 
 describe('Login Component', () => {
   test('Should start with initial state', () => {
-    render(<Login />)
+    makeSut()
+
     const errorWrapper = screen.getByTestId('error-wrap')
     expect(errorWrapper.childElementCount).toBe(0)
 
