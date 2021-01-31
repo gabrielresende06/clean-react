@@ -1,16 +1,30 @@
 import React from 'react'
 import '@testing-library/jest-dom'
-import { render, RenderResult, screen } from '@testing-library/react'
+import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
+import { Validation } from '@/presentation/protocols/validation'
 
 type SutTypes = {
   sut: RenderResult
+  validationSpy: ValidationSpy
+}
+
+class ValidationSpy implements Validation {
+  errorMessage: string
+  input: object
+
+  validate (input: object): string {
+    this.input = input
+    return this.errorMessage
+  }
 }
 
 const makeSut = (): SutTypes => {
-  const sut = render(<Login />)
+  const validationSpy = new ValidationSpy()
+  const sut = render(<Login validation={validationSpy} />)
   return {
-    sut
+    sut,
+    validationSpy
   }
 }
 
@@ -31,5 +45,15 @@ describe('Login Component', () => {
     const passwordStatus = screen.getByTestId('password-status')
     expect(passwordStatus).toHaveProperty('title', 'Campo obrigatório')
     expect(passwordStatus).toHaveTextContent('🔴')
+  })
+
+  test('Should call Validation with correct email', () => {
+    const { validationSpy } = makeSut()
+
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: 'any_email' } })
+    expect(validationSpy.input).toEqual({
+      email: 'any_email'
+    })
   })
 })
