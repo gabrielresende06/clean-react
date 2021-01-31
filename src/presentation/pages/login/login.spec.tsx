@@ -43,7 +43,7 @@ const initializationInput = (inputId: string, value: string = faker.random.word(
   return input
 }
 
-const simulateStatusForField = (fieldName: string, validationError?: string): void => {
+const testStatusForField = (fieldName: string, validationError?: string): void => {
   const emailStatus = screen.getByTestId(`${fieldName}-status`)
   expect(emailStatus).toHaveProperty('title', validationError || 'Tudo certo!')
   expect(emailStatus).toHaveTextContent(validationError ? '🔴' : '🟢')
@@ -60,8 +60,8 @@ describe('Login Component', () => {
     const submitButton = screen.getByTestId('submit')
     expect(submitButton).toBeDisabled()
 
-    simulateStatusForField('email', validationError)
-    simulateStatusForField('password', validationError)
+    testStatusForField('email', validationError)
+    testStatusForField('password', validationError)
   })
 
   test('Should call Validation with correct email', () => {
@@ -89,7 +89,7 @@ describe('Login Component', () => {
     validationStub.errorMessage = faker.random.words()
 
     initializationInput('email')
-    simulateStatusForField('email', validationStub.errorMessage)
+    testStatusForField('email', validationStub.errorMessage)
   })
 
   test('Should show password error if Validation fails', () => {
@@ -97,19 +97,19 @@ describe('Login Component', () => {
     validationStub.errorMessage = faker.random.words()
 
     initializationInput('password')
-    simulateStatusForField('password', validationStub.errorMessage)
+    testStatusForField('password', validationStub.errorMessage)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
     initializationInput('email')
-    simulateStatusForField('email')
+    testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
     initializationInput('password')
-    simulateStatusForField('password')
+    testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
