@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
@@ -13,6 +13,7 @@ type Props = {
 }
 
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
+  const history = useHistory()
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
     email: '',
@@ -41,6 +42,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
       }
       const account = await authentication.auth({ email: state.email, password: state.password })
       localStorage.setItem('accessToken', account.accessToken)
+      history.replace('/')
     } catch (error) {
       dispatch({ type: 'setMessage', value: error.message })
       dispatch({ type: 'setLoading', bool: false })
