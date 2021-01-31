@@ -1,16 +1,19 @@
 import React, { useContext } from 'react'
 import Styles from './input-styles.scss'
 import Context from '@/presentation/contexts/form/form-context'
-import { LoginState } from '@/presentation/pages/login/login'
 
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 const Input: React.FC<Props> = (props: Props) => {
-  const state = useContext<LoginState>(Context)
+  const { state, dispatch } = useContext(Context)
   const error = state.errors[`${props.name}`]
 
   const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
     event.target.readOnly = false
+  }
+
+  const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
+    dispatch({ type: event.target.name, value: event.target.value })
   }
 
   const getStatus = (): string => {
@@ -23,7 +26,7 @@ const Input: React.FC<Props> = (props: Props) => {
 
   return (
       <div className={Styles.inputWrap}>
-        <input {...props} autoComplete="off" readOnly onFocus={enableInput} />
+        <input {...props} data-testid={`${props.name}`} autoComplete="off" readOnly onFocus={enableInput} onChange={handleChange} />
         <span data-testid={`${props.name}-status`} title={getTitle()} className={Styles.status}>
             {getStatus()}
         </span>

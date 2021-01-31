@@ -1,29 +1,18 @@
-import React, { useReducer } from 'react'
-import Styles from './login-styles.scss'
+import React, { useEffect, useReducer } from 'react'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
+import { Validation } from '@/presentation/protocols/validation'
+import reducer from '@/presentation/pages/login/reducer'
+import Styles from './login-styles.scss'
 
-export type LoginState = {
-  isLoading: boolean
-  errors?: {
-    message?: string
-    email?: string
-    password?: string
-  }
+type Props = {
+  validation: Validation
 }
 
-type Action = { type: string }
-
-const reducer = (state: LoginState, action: Action): LoginState => {
-  switch (action.type) {
-    default:
-      return state
-  }
-}
-
-const Login: React.FC = () => {
-  const [state] = useReducer(reducer, {
+const Login: React.FC<Props> = ({ validation }: Props) => {
+  const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
+    email: '',
     errors: {
       message: '',
       email: 'Campo obrigatório',
@@ -31,10 +20,14 @@ const Login: React.FC = () => {
     }
   })
 
+  useEffect(() => {
+    validation.validate({ email: state.email })
+  }, [state.email])
+
   return (
     <div className={Styles.login}>
         <Header />
-        <Context.Provider value={state}>
+        <Context.Provider value={{ state, dispatch }}>
             <form className={Styles.form}>
                 <h2>Login</h2>
 
