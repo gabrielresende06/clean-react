@@ -3,20 +3,7 @@ import faker from 'faker'
 import '@testing-library/jest-dom'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { ValidationStub } from '@/presentation/test'
-import { Authentication, AuthenticationParams } from '@/domain/usecases'
-import { AccountModel } from '@/domain/models'
-import { mockAccountModel } from '@/domain/test'
-
-class AuthenticationSpy implements Authentication {
-  account = mockAccountModel()
-  params: AuthenticationParams
-
-  async auth (params: AuthenticationParams): Promise<AccountModel | undefined> {
-    this.params = params
-    return this.account
-  }
-}
+import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
 
 type SutTypes = {
   sut: RenderResult
