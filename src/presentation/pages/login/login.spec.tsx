@@ -4,6 +4,7 @@ import '@testing-library/jest-dom'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/test'
+import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
@@ -166,5 +167,23 @@ describe('Login Component', () => {
     fireEvent.submit(form)
 
     expect(authenticationSpy.callsCount).toBe(0)
+  })
+
+  test('Should present error if Authentication fails', async () => {
+    const { authenticationSpy } = makeSut()
+    const error = new InvalidCredentialsError()
+    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(new InvalidCredentialsError()))
+
+    initializationInput('email')
+    initializationInput('password')
+
+    const submitButton = screen.getByTestId('submit')
+    await fireEvent.click(submitButton)
+
+    const mainError = screen.getByTestId('main-error')
+    expect(mainError).toHaveTextContent(error.message)
+
+    const errorWrapper = screen.getByTestId('error-wrap')
+    expect(errorWrapper.childElementCount).toBe(1)
   })
 })
