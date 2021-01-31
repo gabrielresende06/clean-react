@@ -9,6 +9,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         email: action.value
       }
+    case 'password':
+      return {
+        ...state,
+        password: action.value
+      }
     default:
       return state
   }

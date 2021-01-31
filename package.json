@@ -49,6 +49,7 @@
   "scripts": {
     "test": "jest --passWithNoTests --silent --no-cache --runInBand",
     "test:watch": "npm test -- --watch",
+    "test:verbose": "npm test -- --verbose",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
     "start": "webpack serve --open --port 3000"

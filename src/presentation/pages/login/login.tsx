@@ -13,6 +13,7 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
     email: '',
+    password: '',
     errors: {
       message: '',
       email: 'Campo obrigatório',
@@ -21,8 +22,14 @@ const Login: React.FC<Props> = ({ validation }: Props) => {
   })
 
   useEffect(() => {
+    console.log(state.email)
     validation.validate({ email: state.email })
   }, [state.email])
+
+  useEffect(() => {
+    console.log(state.password)
+    validation.validate({ password: state.password })
+  }, [state.password])
 
   return (
     <div className={Styles.login}>
