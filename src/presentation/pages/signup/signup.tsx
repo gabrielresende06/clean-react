@@ -1,14 +1,24 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useReducer } from 'react'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import Styles from './signup-styles.scss'
+import { reducer } from '@/presentation/pages/signup/reducer'
 
 const Signup: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, {
+    isLoading: false,
+    errors: {
+      message: '',
+      name: 'Campo obrigatório',
+      email: 'Campo obrigatório',
+      password: 'Campo obrigatório',
+      passwordConfirmation: 'Campo obrigatório'
+    }
+  })
   return (
     <div className={Styles.signup}>
         <Header />
-        <Context.Provider value={{ state: { errors: {} } }}>
+        <Context.Provider value={{ state, dispatch }}>
             <form className={Styles.form} >
                 <h2>Criar conta</h2>
 
@@ -17,10 +27,10 @@ const Signup: React.FC = () => {
                 <Input type="password" name="password" placeholder="Digite sua senha" />
                 <Input type="password" name="passwordConfirmation" placeholder="Repita sua senha" />
 
-                <button className={Styles.submit} type="submit">Criar</button>
-                <Link to='/login' className={Styles.link}>
+                <button data-testid="submit" disabled className={Styles.submit} type="submit">Criar</button>
+                <span className={Styles.link}>
                     Voltar Para Login
-                </Link>
+                </span>
 
                 <FormStatus />
             </form>
