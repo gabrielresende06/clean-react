@@ -38,13 +38,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const initializationInput = (inputId: string, value: string = faker.random.word()): HTMLElement => {
-  const input = screen.getByTestId(inputId)
-  fireEvent.input(input, { target: { value } })
-
-  return input
-}
-
 describe('Signup Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
@@ -62,7 +55,7 @@ describe('Signup Component', () => {
     const email = faker.internet.email()
     const validationSpy = jest.spyOn(validationStub, 'validate')
 
-    initializationInput('email', email)
+    Helper.initializationInput('email', email)
     expect(validationSpy).toHaveBeenCalledWith('email', email)
   })
 
@@ -72,7 +65,7 @@ describe('Signup Component', () => {
     const password = faker.internet.password()
     const validationSpy = jest.spyOn(validationStub, 'validate')
 
-    initializationInput('password', password)
+    Helper.initializationInput('password', password)
     expect(validationSpy).toHaveBeenCalledWith('password', password)
   })
 
@@ -80,7 +73,7 @@ describe('Signup Component', () => {
     const { validationStub } = makeSut()
     validationStub.errorMessage = faker.random.words()
 
-    initializationInput('email')
+    Helper.initializationInput('email')
     Helper.testStatusForField('email', validationStub.errorMessage)
   })
 
@@ -88,27 +81,27 @@ describe('Signup Component', () => {
     const { validationStub } = makeSut()
     validationStub.errorMessage = faker.random.words()
 
-    initializationInput('password')
+    Helper.initializationInput('password')
     Helper.testStatusForField('password', validationStub.errorMessage)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
-    initializationInput('email')
+    Helper.initializationInput('email')
     Helper.testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
-    initializationInput('password')
+    Helper.initializationInput('password')
     Helper.testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
     makeSut()
 
-    initializationInput('password')
-    initializationInput('email')
+    Helper.initializationInput('password')
+    Helper.initializationInput('email')
 
     const submitButton = screen.getByTestId('submit')
     expect(submitButton).toBeEnabled()
@@ -117,8 +110,8 @@ describe('Signup Component', () => {
   test('Should show spinner on submit ', () => {
     makeSut()
 
-    initializationInput('password')
-    initializationInput('email')
+    Helper.initializationInput('password')
+    Helper.initializationInput('email')
 
     const submitButton = screen.getByTestId('submit')
     fireEvent.click(submitButton)
@@ -132,8 +125,8 @@ describe('Signup Component', () => {
 
     const password = faker.internet.password()
     const email = faker.internet.email()
-    initializationInput('password', password)
-    initializationInput('email', email)
+    Helper.initializationInput('password', password)
+    Helper.initializationInput('email', email)
 
     const submitButton = screen.getByTestId('submit')
     fireEvent.click(submitButton)
@@ -147,8 +140,8 @@ describe('Signup Component', () => {
   test('Should call Authentication only once', () => {
     const { authenticationSpy } = makeSut()
 
-    initializationInput('password')
-    initializationInput('email')
+    Helper.initializationInput('password')
+    Helper.initializationInput('email')
 
     const submitButton = screen.getByTestId('submit')
     fireEvent.click(submitButton)
@@ -161,7 +154,7 @@ describe('Signup Component', () => {
     const validationError = faker.random.words()
     const { authenticationSpy } = makeSut({ validationError })
 
-    initializationInput('email')
+    Helper.initializationInput('email')
 
     const form = screen.getByTestId('form')
     fireEvent.submit(form)
@@ -174,8 +167,8 @@ describe('Signup Component', () => {
     const error = new InvalidCredentialsError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(new InvalidCredentialsError()))
 
-    initializationInput('email')
-    initializationInput('password')
+    Helper.initializationInput('email')
+    Helper.initializationInput('password')
 
     const submitButton = screen.getByTestId('submit')
     await fireEvent.click(submitButton)
@@ -189,8 +182,8 @@ describe('Signup Component', () => {
   test('Should call SaveAccessToken on success', async () => {
     const { authenticationSpy, saveAccessTokenMock } = makeSut()
 
-    initializationInput('email')
-    initializationInput('password')
+    Helper.initializationInput('email')
+    Helper.initializationInput('password')
 
     const submitButton = screen.getByTestId('submit')
     await fireEvent.click(submitButton)

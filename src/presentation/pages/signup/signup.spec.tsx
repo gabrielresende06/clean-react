@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
 import { Helper, ValidationStub } from '@/presentation/test'
 import '@testing-library/jest-dom'
@@ -24,13 +24,6 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const initializationInput = (inputId: string, value: string = faker.random.word()): HTMLElement => {
-  const input = screen.getByTestId(inputId)
-  fireEvent.input(input, { target: { value } })
-
-  return input
-}
-
 describe('Signup Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
@@ -48,7 +41,7 @@ describe('Signup Component', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
 
-    initializationInput('name')
+    Helper.initializationInput('name')
     Helper.testStatusForField('name', validationError)
   })
 })
