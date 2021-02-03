@@ -5,7 +5,7 @@ import faker from 'faker'
 import '@testing-library/jest-dom'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { AuthenticationSpy, ValidationStub, SaveAccessTokenMock } from '@/presentation/test'
+import { AuthenticationSpy, ValidationStub, SaveAccessTokenMock , Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
@@ -45,25 +45,15 @@ const initializationInput = (inputId: string, value: string = faker.random.word(
   return input
 }
 
-const testStatusForField = (fieldName: string, validationError?: string): void => {
-  const emailStatus = screen.getByTestId(`${fieldName}-status`)
-  expect(emailStatus).toHaveProperty('title', validationError || 'Tudo certo!')
-  expect(emailStatus).toHaveTextContent(validationError ? '🔴' : '🟢')
-}
-
 describe('Signup Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
 
-    const errorWrapper = screen.getByTestId('error-wrap')
-    expect(errorWrapper.childElementCount).toBe(0)
-
-    const submitButton = screen.getByTestId('submit')
-    expect(submitButton).toBeDisabled()
-
-    testStatusForField('email', validationError)
-    testStatusForField('password', validationError)
+    Helper.testChildCount('error-wrap', 0)
+    Helper.testButtonIsDisable('submit')
+    Helper.testStatusForField('email', validationError)
+    Helper.testStatusForField('password', validationError)
   })
 
   test('Should call Validation with correct email', () => {
@@ -91,7 +81,7 @@ describe('Signup Component', () => {
     validationStub.errorMessage = faker.random.words()
 
     initializationInput('email')
-    testStatusForField('email', validationStub.errorMessage)
+    Helper.testStatusForField('email', validationStub.errorMessage)
   })
 
   test('Should show password error if Validation fails', () => {
@@ -99,19 +89,19 @@ describe('Signup Component', () => {
     validationStub.errorMessage = faker.random.words()
 
     initializationInput('password')
-    testStatusForField('password', validationStub.errorMessage)
+    Helper.testStatusForField('password', validationStub.errorMessage)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
     initializationInput('email')
-    testStatusForField('email')
+    Helper.testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
     initializationInput('password')
-    testStatusForField('password')
+    Helper.testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
@@ -193,8 +183,7 @@ describe('Signup Component', () => {
     const mainError = screen.getByTestId('main-error')
     expect(mainError).toHaveTextContent(error.message)
 
-    const errorWrapper = screen.getByTestId('error-wrap')
-    expect(errorWrapper.childElementCount).toBe(1)
+    Helper.testChildCount('error-wrap', 1)
   })
 
   test('Should call SaveAccessToken on success', async () => {
