@@ -38,11 +38,6 @@ const simulateValidSubmit = async (
   await fireEvent.click(submitButton)
 }
 
-const testElementExist = (field: string): void => {
-  const element = screen.getByTestId(field)
-  expect(element).toBeTruthy()
-}
-
 describe('Signup Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
@@ -126,6 +121,6 @@ describe('Signup Component', () => {
   test('Should show spinner on submit ', async () => {
     makeSut()
     await simulateValidSubmit()
-    testElementExist('spinner')
+    Helper.testElementExist('spinner')
   })
 })

@@ -28,3 +28,8 @@ export const initializationInput = (inputId: string, value: string = faker.rando
 
   return input
 }
+
+export const testElementExist = (field: string): void => {
+  const element = screen.getByTestId(field)
+  expect(element).toBeTruthy()
+}

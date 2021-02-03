@@ -115,8 +115,7 @@ describe('Signup Component', () => {
     const submitButton = screen.getByTestId('submit')
     fireEvent.click(submitButton)
 
-    const spinner = screen.getByTestId('spinner')
-    expect(spinner).toBeTruthy()
+    Helper.testElementExist('spinner')
   })
 
   test('Should call Authentication with corre values', () => {
