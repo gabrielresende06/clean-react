@@ -11,6 +11,11 @@ export const testButtonIsDisable = (field: string): void => {
   expect(submitButton).toBeDisabled()
 }
 
+export const testButtonIsEnabled = (field: string): void => {
+  const submitButton = screen.getByTestId(field)
+  expect(submitButton).toBeEnabled()
+}
+
 export const testStatusForField = (fieldName: string, validationError?: string): void => {
   const fieldStatus = screen.getByTestId(`${fieldName}-status`)
   expect(fieldStatus).toHaveProperty('title', validationError || 'Tudo certo!')

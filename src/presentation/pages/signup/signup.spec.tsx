@@ -92,4 +92,15 @@ describe('Signup Component', () => {
     Helper.initializationInput('passwordConfirmation')
     Helper.testStatusForField('passwordConfirmation')
   })
+
+  test('Should enable submit button if form is valid', () => {
+    makeSut()
+
+    Helper.initializationInput('name')
+    Helper.initializationInput('email')
+    Helper.initializationInput('password')
+    Helper.initializationInput('passwordConfirmation')
+
+    Helper.testButtonIsEnabled('submit')
+  })
 })

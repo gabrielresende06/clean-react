@@ -103,8 +103,7 @@ describe('Signup Component', () => {
     Helper.initializationInput('password')
     Helper.initializationInput('email')
 
-    const submitButton = screen.getByTestId('submit')
-    expect(submitButton).toBeEnabled()
+    Helper.testButtonIsEnabled('submit')
   })
 
   test('Should show spinner on submit ', () => {
