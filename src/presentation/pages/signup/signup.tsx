@@ -4,12 +4,14 @@ import Context from '@/presentation/contexts/form/form-context'
 import Styles from './signup-styles.scss'
 import { reducer } from '@/presentation/pages/signup/reducer'
 import { Validation } from '@/presentation/protocols/validation'
+import { AddAccount } from '@/domain/usecases'
 
 type Props = {
   validation: Validation
+  addAccount: AddAccount
 }
 
-const Signup: React.FC<Props> = ({ validation }: Props) => {
+const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
     name: '',
@@ -44,6 +46,12 @@ const Signup: React.FC<Props> = ({ validation }: Props) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     dispatch({ type: 'setLoading', bool: true })
+    await addAccount.add({
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      passwordConfirmation: state.passwordConfirmation
+    })
   }
 
   return (
