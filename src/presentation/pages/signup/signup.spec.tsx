@@ -153,4 +153,16 @@ describe('Signup Component', () => {
 
     expect(addAccountSpy.callsCount).toBe(1)
   })
+
+  test('Should not call AddAccount if form is invalid', () => {
+    const validationError = faker.random.words()
+    const { addAccountSpy } = makeSut({ validationError })
+
+    Helper.initializationInput('email')
+
+    const form = screen.getByTestId('form')
+    fireEvent.submit(form)
+
+    expect(addAccountSpy.callsCount).toBe(0)
+  })
 })
