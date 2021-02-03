@@ -80,4 +80,16 @@ describe('Signup Component', () => {
     Helper.initializationInput('email')
     Helper.testStatusForField('email')
   })
+
+  test('Should show valid password state if Validation succeeds', () => {
+    makeSut()
+    Helper.initializationInput('password')
+    Helper.testStatusForField('password')
+  })
+
+  test('Should show valid password confirmation state if Validation succeeds', () => {
+    makeSut()
+    Helper.initializationInput('passwordConfirmation')
+    Helper.testStatusForField('passwordConfirmation')
+  })
 })
