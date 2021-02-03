@@ -16,7 +16,7 @@ export type State = {
 }
 
 export type Action = { type: 'setLoading', bool: boolean} |
-{ type: 'name' | 'errorName' | 'email' | 'errorEmail' | 'password' | 'errorPassword' | 'passwordConfirmation' | 'errorPasswordConfirmation', value: string }
+{ type: 'name' | 'errorName' | 'email' | 'errorEmail' | 'password' | 'errorPassword' | 'passwordConfirmation' | 'errorPasswordConfirmation' | 'setMessage', value: string }
 
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -59,6 +59,11 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         errors: { ...state.errors, passwordConfirmation: action.value }
+      }
+    case 'setMessage':
+      return {
+        ...state,
+        errors: { ...state.errors, message: action.value }
       }
     case 'setLoading':
       return {

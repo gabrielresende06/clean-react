@@ -37,10 +37,10 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
-      dispatch({ type: 'setLoading', bool: true })
       if (state.isLoading || state.errors.email || state.errors.password) {
         return
       }
+      dispatch({ type: 'setLoading', bool: true })
       const account = await authentication.auth({ email: state.email, password: state.password })
       await saveAccessToken.save(account.accessToken)
       history.replace('/')
