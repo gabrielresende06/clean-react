@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, RenderResult } from '@testing-library/react'
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
 import { Helper, ValidationStub } from '@/presentation/test'
 import '@testing-library/jest-dom'
@@ -22,6 +22,25 @@ const makeSut = (params?: SutParams): SutTypes => {
     sut,
     validationStub
   }
+}
+
+const simulateValidSubmit = async (
+  name: string = faker.name.findName(),
+  email: string = faker.internet.email(),
+  password: string = faker.internet.password()
+): Promise<void> => {
+  Helper.initializationInput('name', name)
+  Helper.initializationInput('email', email)
+  Helper.initializationInput('password', password)
+  Helper.initializationInput('passwordConfirmation', password)
+
+  const submitButton = screen.getByTestId('submit')
+  await fireEvent.click(submitButton)
+}
+
+const testElementExist = (field: string): void => {
+  const element = screen.getByTestId(field)
+  expect(element).toBeTruthy()
 }
 
 describe('Signup Component', () => {
@@ -102,5 +121,11 @@ describe('Signup Component', () => {
     Helper.initializationInput('passwordConfirmation')
 
     Helper.testButtonIsEnabled('submit')
+  })
+
+  test('Should show spinner on submit ', async () => {
+    makeSut()
+    await simulateValidSubmit()
+    testElementExist('spinner')
   })
 })

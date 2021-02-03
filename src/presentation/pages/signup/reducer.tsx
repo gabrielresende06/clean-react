@@ -60,6 +60,11 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         errors: { ...state.errors, passwordConfirmation: action.value }
       }
+    case 'setLoading':
+      return {
+        ...state,
+        isLoading: action.bool
+      }
     default: return state
   }
 }
