@@ -32,7 +32,7 @@ describe('Signup Component', () => {
     Helper.testChildCount('error-wrap', 0)
     Helper.testButtonIsDisable('submit')
     Helper.testStatusForField('name', validationError)
-    Helper.testStatusForField('email', 'Campo obrigatório')
+    Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', 'Campo obrigatório')
     Helper.testStatusForField('passwordConfirmation', 'Campo obrigatório')
   })
@@ -43,5 +43,13 @@ describe('Signup Component', () => {
 
     Helper.initializationInput('name')
     Helper.testStatusForField('name', validationError)
+  })
+
+  test('Should show email error if Validation fails', () => {
+    const validationError = faker.random.words()
+    makeSut({ validationError })
+
+    Helper.initializationInput('email')
+    Helper.testStatusForField('email', validationError)
   })
 })
