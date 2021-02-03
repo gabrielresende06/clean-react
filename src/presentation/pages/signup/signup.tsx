@@ -1,20 +1,31 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import Styles from './signup-styles.scss'
 import { reducer } from '@/presentation/pages/signup/reducer'
+import { Validation } from '@/presentation/protocols/validation'
 
-const Signup: React.FC = () => {
+type Props = {
+  validation: Validation
+}
+
+const Signup: React.FC<Props> = ({ validation }: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
+    name: '',
     errors: {
       message: '',
-      name: 'Campo obrigatório',
+      name: '',
       email: 'Campo obrigatório',
       password: 'Campo obrigatório',
       passwordConfirmation: 'Campo obrigatório'
     }
   })
+
+  useEffect(() => {
+    dispatch({ type: 'errorName', value: validation.validate('name', state.name) })
+  }, [state.name])
+
   return (
     <div className={Styles.signup}>
         <Header />
