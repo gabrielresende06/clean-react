@@ -4,14 +4,17 @@ import Context from '@/presentation/contexts/form/form-context'
 import Styles from './signup-styles.scss'
 import { reducer } from '@/presentation/pages/signup/reducer'
 import { Validation } from '@/presentation/protocols/validation'
-import { AddAccount } from '@/domain/usecases'
+import { AddAccount, SaveAccessToken } from '@/domain/usecases'
+import { useHistory } from 'react-router-dom'
 
 type Props = {
   validation: Validation
   addAccount: AddAccount
+  saveAccessToken: SaveAccessToken
 }
 
-const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
+const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Props) => {
+  const history = useHistory()
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
     name: '',
@@ -58,12 +61,14 @@ const Signup: React.FC<Props> = ({ validation, addAccount }: Props) => {
 
       dispatch({ type: 'setLoading', bool: true })
 
-      await addAccount.add({
+      const account = await addAccount.add({
         name: state.name,
         email: state.email,
         password: state.password,
         passwordConfirmation: state.passwordConfirmation
       })
+      await saveAccessToken.save(account.accessToken)
+      history.replace('/')
     } catch (error) {
       dispatch({ type: 'setMessage', value: error.message })
       dispatch({ type: 'setLoading', bool: false })
