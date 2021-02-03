@@ -41,11 +41,16 @@ const Signup: React.FC<Props> = ({ validation }: Props) => {
     dispatch({ type: 'errorPasswordConfirmation', value: validation.validate('passwordConfirmation', state.passwordConfirmation) })
   }, [state.passwordConfirmation])
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    dispatch({ type: 'setLoading', bool: true })
+  }
+
   return (
     <div className={Styles.signup}>
         <Header />
         <Context.Provider value={{ state, dispatch }}>
-            <form className={Styles.form} >
+            <form className={Styles.form} onSubmit={handleSubmit}>
                 <h2>Criar conta</h2>
 
                 <Input type="text" name="name" placeholder="Digite seu nome" />
