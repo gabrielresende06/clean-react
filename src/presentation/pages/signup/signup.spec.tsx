@@ -1,13 +1,13 @@
 import React from 'react'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
-import { Helper, ValidationStub } from '@/presentation/test'
+import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
 import '@testing-library/jest-dom'
 import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
-  validationStub: ValidationStub
+  addAccountSpy: AddAccountSpy
 }
 
 type SutParams = {
@@ -16,11 +16,12 @@ type SutParams = {
 
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
+  const addAccountSpy = new AddAccountSpy()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Signup validation={validationStub} />)
+  const sut = render(<Signup validation={validationStub} addAccount={addAccountSpy} />)
   return {
     sut,
-    validationStub
+    addAccountSpy
   }
 }
 
@@ -122,5 +123,25 @@ describe('Signup Component', () => {
     makeSut()
     await simulateValidSubmit()
     Helper.testElementExist('spinner')
+  })
+
+  test('Should call AddAccount with correct values', async () => {
+    const { addAccountSpy } = makeSut()
+
+    const name = faker.name.findName()
+    const password = faker.internet.password()
+    const email = faker.internet.email()
+
+    await simulateValidSubmit(name, email, password)
+
+    const submitButton = screen.getByTestId('submit')
+    fireEvent.click(submitButton)
+
+    expect(addAccountSpy.params).toEqual({
+      name,
+      email,
+      password,
+      passwordConfirmation: password
+    })
   })
 })
