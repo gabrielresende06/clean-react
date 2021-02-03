@@ -13,10 +13,11 @@ const Signup: React.FC<Props> = ({ validation }: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
     name: '',
+    email: '',
     errors: {
       message: '',
       name: '',
-      email: 'Campo obrigatório',
+      email: '',
       password: 'Campo obrigatório',
       passwordConfirmation: 'Campo obrigatório'
     }
@@ -25,6 +26,10 @@ const Signup: React.FC<Props> = ({ validation }: Props) => {
   useEffect(() => {
     dispatch({ type: 'errorName', value: validation.validate('name', state.name) })
   }, [state.name])
+
+  useEffect(() => {
+    dispatch({ type: 'errorEmail', value: validation.validate('email', state.email) })
+  }, [state.email])
 
   return (
     <div className={Styles.signup}>
