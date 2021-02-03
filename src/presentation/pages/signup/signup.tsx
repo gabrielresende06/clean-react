@@ -5,7 +5,7 @@ import Styles from './signup-styles.scss'
 import { reducer } from '@/presentation/pages/signup/reducer'
 import { Validation } from '@/presentation/protocols/validation'
 import { AddAccount, SaveAccessToken } from '@/domain/usecases'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 type Props = {
   validation: Validation
@@ -90,9 +90,9 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
                 <button data-testid="submit"
                         disabled={!!state.errors.name || !!state.errors.email || !!state.errors.password || !!state.errors.passwordConfirmation || state.isLoading}
                         className={Styles.submit} type="submit">Criar</button>
-                <span className={Styles.link}>
+                <Link data-testid='login' to="/login" replace className={Styles.link}>
                     Voltar Para Login
-                </span>
+                </Link>
 
                 <FormStatus />
             </form>
