@@ -74,4 +74,10 @@ describe('Signup Component', () => {
     Helper.initializationInput('name')
     Helper.testStatusForField('name')
   })
+
+  test('Should show valid email state if Validation succeeds', () => {
+    makeSut()
+    Helper.initializationInput('email')
+    Helper.testStatusForField('email')
+  })
 })
