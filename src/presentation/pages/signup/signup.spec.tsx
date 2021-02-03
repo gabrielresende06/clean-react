@@ -1,28 +1,37 @@
 import React from 'react'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
-import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
+import { Helper, ValidationStub, AddAccountSpy, SaveAccessTokenMock } from '@/presentation/test'
+import { EmailInUseError } from '@/domain/errors'
+import { createMemoryHistory } from 'history'
+import { Router } from 'react-router-dom'
 import '@testing-library/jest-dom'
 import faker from 'faker'
-import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
   validationError: string
 }
-
+const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Signup validation={validationStub} addAccount={addAccountSpy} />)
+  const sut = render(
+      <Router history={history}>
+        <Signup validation={validationStub} addAccount={addAccountSpy} saveAccessToken={saveAccessTokenMock} />
+      </Router>
+  )
   return {
     sut,
-    addAccountSpy
+    addAccountSpy,
+    saveAccessTokenMock
   }
 }
 
@@ -178,5 +187,15 @@ describe('Signup Component', () => {
     expect(mainError).toHaveTextContent(error.message)
 
     Helper.testChildCount('error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { addAccountSpy, saveAccessTokenMock } = makeSut()
+
+    await simulateValidSubmit(faker.name.findName(), faker.internet.email(), faker.internet.password())
+
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
