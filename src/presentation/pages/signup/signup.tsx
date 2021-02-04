@@ -32,19 +32,22 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
   })
 
   useEffect(() => {
-    dispatch({ type: 'errorName', value: validation.validate('name', state.name) })
+    dispatch({ type: 'errorName', value: validation.validate('name', { name: state.name }) })
   }, [state.name])
 
   useEffect(() => {
-    dispatch({ type: 'errorEmail', value: validation.validate('email', state.email) })
+    dispatch({ type: 'errorEmail', value: validation.validate('email', { email: state.email }) })
   }, [state.email])
 
   useEffect(() => {
-    dispatch({ type: 'errorPassword', value: validation.validate('password', state.password) })
+    dispatch({ type: 'errorPassword', value: validation.validate('password', { password: state.password }) })
   }, [state.password])
 
   useEffect(() => {
-    dispatch({ type: 'errorPasswordConfirmation', value: validation.validate('passwordConfirmation', state.passwordConfirmation) })
+    dispatch({
+      type: 'errorPasswordConfirmation',
+      value: validation.validate('passwordConfirmation', { passwordConfirmation: state.passwordConfirmation })
+    })
   }, [state.passwordConfirmation])
 
   useEffect(() => {

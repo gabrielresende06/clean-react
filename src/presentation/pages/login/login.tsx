@@ -27,11 +27,11 @@ const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }:
   })
 
   useEffect(() => {
-    dispatch({ type: 'errorEmail', value: validation.validate('email', state.email) })
+    dispatch({ type: 'errorEmail', value: validation.validate('email', { email: state.email }) })
   }, [state.email])
 
   useEffect(() => {
-    dispatch({ type: 'errorPassword', value: validation.validate('password', state.password) })
+    dispatch({ type: 'errorPassword', value: validation.validate('password', { password: state.password }) })
   }, [state.password])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
