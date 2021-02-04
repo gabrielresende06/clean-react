@@ -29,7 +29,7 @@ export const reducer = (state: State, action: Action): State => {
     case 'errorName':
       return {
         ...state,
-        errors: { ...state.errors, email: action.value }
+        errors: { ...state.errors, name: action.value }
       }
     case 'email':
       return {
@@ -39,7 +39,7 @@ export const reducer = (state: State, action: Action): State => {
     case 'errorEmail':
       return {
         ...state,
-        errors: { ...state.errors, name: action.value }
+        errors: { ...state.errors, email: action.value }
       }
     case 'password':
       return {

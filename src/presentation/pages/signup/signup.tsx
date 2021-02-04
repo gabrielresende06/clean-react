@@ -46,7 +46,7 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
   useEffect(() => {
     dispatch({
       type: 'errorPasswordConfirmation',
-      value: validation.validate('passwordConfirmation', { passwordConfirmation: state.passwordConfirmation })
+      value: validation.validate('passwordConfirmation', { password: state.password, passwordConfirmation: state.passwordConfirmation })
     })
   }, [state.passwordConfirmation])
 
