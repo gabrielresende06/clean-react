@@ -17,6 +17,7 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
   const history = useHistory()
   const [state, dispatch] = useReducer(reducer, {
     isLoading: false,
+    isFormInvalid: true,
     name: '',
     email: '',
     password: '',
@@ -46,16 +47,23 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
     dispatch({ type: 'errorPasswordConfirmation', value: validation.validate('passwordConfirmation', state.passwordConfirmation) })
   }, [state.passwordConfirmation])
 
+  useEffect(() => {
+    dispatch({ type: 'setFormIsInvalid', bool: true })
+    if (
+      !state.isLoading &&
+      !state.errors.name &&
+      !state.errors.email &&
+      !state.errors.password &&
+      !state.errors.passwordConfirmation
+    ) {
+      dispatch({ type: 'setFormIsInvalid', bool: false })
+    }
+  }, [state])
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
-      if (
-        state.isLoading ||
-              state.errors.name ||
-              state.errors.email ||
-              state.errors.password ||
-              state.errors.passwordConfirmation
-      ) {
+      if (state.isFormInvalid) {
         return
       }
 
@@ -88,7 +96,7 @@ const Signup: React.FC<Props> = ({ validation, addAccount, saveAccessToken }: Pr
                 <Input type="password" name="passwordConfirmation" placeholder="Repita sua senha" />
 
                 <button data-testid="submit"
-                        disabled={!!state.errors.name || !!state.errors.email || !!state.errors.password || !!state.errors.passwordConfirmation || state.isLoading}
+                        disabled={state.isFormInvalid}
                         className={Styles.submit} type="submit">Criar</button>
                 <Link data-testid='login' to="/login" replace className={Styles.link}>
                     Voltar Para Login

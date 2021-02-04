@@ -8,6 +8,7 @@ export type Errors = {
 
 export type State = {
   isLoading: boolean
+  isFormInvalid: boolean
   name: string
   email: string
   password: string
@@ -15,7 +16,7 @@ export type State = {
   errors?: Errors
 }
 
-export type Action = { type: 'setLoading', bool: boolean} |
+export type Action = { type: 'setLoading' | 'setFormIsInvalid', bool: boolean} |
 { type: 'name' | 'errorName' | 'email' | 'errorEmail' | 'password' | 'errorPassword' | 'passwordConfirmation' | 'errorPasswordConfirmation' | 'setMessage', value: string }
 
 export const reducer = (state: State, action: Action): State => {
@@ -69,6 +70,11 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoading: action.bool
+      }
+    case 'setFormIsInvalid':
+      return {
+        ...state,
+        isFormInvalid: action.bool
       }
     default: return state
   }
