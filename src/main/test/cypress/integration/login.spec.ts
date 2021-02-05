@@ -1,6 +1,6 @@
 import * as faker from 'faker'
 import { testInputStatus, testMainError } from '../support/form-helper'
-import * as Http from './login-mocks'
+import * as Http from '../support/login-mocks'
 
 const baseUrl: string = Cypress.config().baseUrl
 
