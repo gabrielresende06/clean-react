@@ -72,4 +72,11 @@ describe('SignUp', () => {
     testMainError('Esse e-mail já está em uso')
     cy.url().should('eq', `${baseUrl}/signup`)
   })
+
+  it('should present unexpectedError on 400', () => {
+    Http.mockUnexpectedError()
+    simulateValidSubmit()
+    testMainError('Algo de errado aconteceu. Tente novamente em breve.')
+    cy.url().should('eq', `${baseUrl}/signup`)
+  })
 })
