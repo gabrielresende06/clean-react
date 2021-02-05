@@ -95,4 +95,15 @@ describe('SignUp', () => {
     cy.url().should('eq', `${baseUrl}/`)
     cy.window().then(window => { assert.isOk(window.localStorage.getItem('accessToken')) })
   })
+
+  it('should prevent multiple submit', () => {
+    Http.mockOk()
+    cy.getByTestId('name').focus().type(faker.name.findName())
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    const password = faker.internet.password(5)
+    cy.getByTestId('password').focus().type(password)
+    cy.getByTestId('passwordConfirmation').focus().type(password)
+    cy.getByTestId('submit').dblclick()
+    cy.get('@request.all').should('have.length', 1)
+  })
 })
