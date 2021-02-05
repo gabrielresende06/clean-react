@@ -1,9 +1,8 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
-import reducer from '@/presentation/pages/login/reducer'
 import Styles from './login-styles.scss'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
 
@@ -15,53 +14,60 @@ type Props = {
 
 const Login: React.FC<Props> = ({ validation, authentication, saveAccessToken }: Props) => {
   const history = useHistory()
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, setState] = useState({
     isLoading: false,
+    isFormInvalid: true,
     email: '',
     password: '',
-    errors: {
-      message: '',
-      email: '',
-      password: ''
-    }
+    emailError: '',
+    passwordError: '',
+    mainError: ''
   })
 
   useEffect(() => {
-    dispatch({ type: 'errorEmail', value: validation.validate('email', { email: state.email }) })
-  }, [state.email])
-
-  useEffect(() => {
-    dispatch({ type: 'errorPassword', value: validation.validate('password', { password: state.password }) })
-  }, [state.password])
+    const { email, password } = state
+    const formData = { email, password }
+    const emailError = validation.validate('email', formData)
+    const passwordError = validation.validate('password', formData)
+    setState({
+      ...state,
+      emailError,
+      passwordError,
+      isFormInvalid: !!emailError || !!passwordError
+    })
+  }, [state.email, state.password])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
-      if (state.isLoading || state.errors.email || state.errors.password) {
+      if (state.isLoading || state.emailError || state.passwordError) {
         return
       }
-      dispatch({ type: 'setLoading', bool: true })
+      setState({ ...state, isLoading: true })
       const account = await authentication.auth({ email: state.email, password: state.password })
       await saveAccessToken.save(account.accessToken)
       history.replace('/')
     } catch (error) {
-      dispatch({ type: 'setMessage', value: error.message })
-      dispatch({ type: 'setLoading', bool: false })
+      setState({
+        ...state,
+        isLoading: false,
+        mainError: error.message
+      })
     }
   }
 
   return (
     <div className={Styles.login}>
         <Header />
-        <Context.Provider value={{ state, dispatch }}>
+        <Context.Provider value={{ state, setState }}>
             <form data-testid='form' className={Styles.form} onSubmit={handleSubmit}>
                 <h2>Login</h2>
 
                 <Input type="email" name="email" placeholder="Digite seu e-mail" />
                 <Input type="password" name="password" placeholder="Digite sua senha" />
 
-                <button data-testid='submit' disabled={!!state.errors.email || !!state.errors.password || state.isLoading} className={Styles.submit} type="submit">Entrar</button>
-                <Link data-testid='signup' to='/signup' className={Styles.link}>
+                <button data-testid='submit' disabled={!!state.emailError || !!state.passwordError || state.isLoading} className={Styles.submit} type="submit">Entrar</button>
+                <Link data-testid='signup-link' to='/signup' className={Styles.link}>
                     Criar Conta
                 </Link>
 

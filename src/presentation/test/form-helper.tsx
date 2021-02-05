@@ -17,9 +17,12 @@ export const testButtonIsEnabled = (field: string): void => {
 }
 
 export const testStatusForField = (fieldName: string, validationError?: string): void => {
-  const fieldStatus = screen.getByTestId(`${fieldName}-status`)
-  expect(fieldStatus).toHaveProperty('title', validationError || 'Tudo certo!')
-  expect(fieldStatus).toHaveTextContent(validationError ? '🔴' : '🟢')
+  const wrap = screen.getByTestId(`${fieldName}-wrap`)
+  const field = screen.getByTestId(`${fieldName}`)
+  const label = screen.getByTestId(`${fieldName}-label`)
+  expect(wrap.getAttribute('data-status')).toBe(validationError ? 'invalid' : 'valid')
+  expect(field.title).toBe(validationError ?? '')
+  expect(label.title).toBe(validationError ?? '')
 }
 
 export const initializationInput = (inputId: string, value: string = faker.random.word()): HTMLElement => {

@@ -1,12 +1,12 @@
 import React from 'react'
+import faker from 'faker'
+import '@testing-library/jest-dom'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
 import { Helper, ValidationStub, AddAccountSpy, SaveAccessTokenMock } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 import { createMemoryHistory } from 'history'
 import { Router } from 'react-router-dom'
-import '@testing-library/jest-dom'
-import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
@@ -49,7 +49,7 @@ const simulateValidSubmit = async (
   await fireEvent.click(submitButton)
 }
 
-describe('Signup Component', () => {
+describe('SignupComponent', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })

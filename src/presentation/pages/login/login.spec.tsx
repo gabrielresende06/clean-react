@@ -38,7 +38,7 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-describe('Signup Component', () => {
+describe('LoginComponent', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
@@ -47,26 +47,6 @@ describe('Signup Component', () => {
     Helper.testButtonIsDisable('submit')
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
-  })
-
-  test('Should call Validation with correct email', () => {
-    const { validationStub } = makeSut()
-
-    const email = faker.internet.email()
-    const validationSpy = jest.spyOn(validationStub, 'validate')
-
-    Helper.initializationInput('email', email)
-    expect(validationSpy).toHaveBeenCalledWith('email', email)
-  })
-
-  test('Should call Validation with correct password', () => {
-    const { validationStub } = makeSut()
-
-    const password = faker.internet.password()
-    const validationSpy = jest.spyOn(validationStub, 'validate')
-
-    Helper.initializationInput('password', password)
-    expect(validationSpy).toHaveBeenCalledWith('password', password)
   })
 
   test('Should show email error if Validation fails', () => {
@@ -106,19 +86,19 @@ describe('Signup Component', () => {
     Helper.testButtonIsEnabled('submit')
   })
 
-  test('Should show spinner on submit ', () => {
+  test('Should show spinner on submit ', async () => {
     makeSut()
 
     Helper.initializationInput('password')
     Helper.initializationInput('email')
 
     const submitButton = screen.getByTestId('submit')
-    fireEvent.click(submitButton)
+    await fireEvent.click(submitButton)
 
     Helper.testElementExist('spinner')
   })
 
-  test('Should call Authentication with corre values', () => {
+  test('Should call Authentication with correct values', () => {
     const { authenticationSpy } = makeSut()
 
     const password = faker.internet.password()
@@ -148,14 +128,14 @@ describe('Signup Component', () => {
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  test('Should not call Authentication if form is invalid', () => {
+  test('Should not call Authentication if form is invalid', async () => {
     const validationError = faker.random.words()
     const { authenticationSpy } = makeSut({ validationError })
 
     Helper.initializationInput('email')
 
     const form = screen.getByTestId('form')
-    fireEvent.submit(form)
+    await fireEvent.submit(form)
 
     expect(authenticationSpy.callsCount).toBe(0)
   })
@@ -191,10 +171,10 @@ describe('Signup Component', () => {
     expect(history.location.pathname).toBe('/')
   })
 
-  test('Should go to signup page', async () => {
+  test('Should go to signup page', () => {
     makeSut()
 
-    const register = screen.getByTestId('signup')
+    const register = screen.getByTestId('signup-link')
     fireEvent.click(register)
 
     expect(history.length).toBe(2)
