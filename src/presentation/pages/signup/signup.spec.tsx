@@ -58,8 +58,8 @@ describe('SignupComponent', () => {
     const validationError = faker.random.words()
     makeSut({ validationError })
 
-    Helper.testChildCount('error-wrap', 0)
-    Helper.testButtonIsDisable('submit')
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByTestId('submit')).toBeDisabled()
     Helper.testStatusForField('name', validationError)
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
@@ -130,13 +130,13 @@ describe('SignupComponent', () => {
     Helper.initializationInput('password')
     Helper.initializationInput('passwordConfirmation')
 
-    Helper.testButtonIsEnabled('submit')
+    expect(screen.getByTestId('submit')).toBeEnabled()
   })
 
   test('Should show spinner on submit ', async () => {
     makeSut()
     await simulateValidSubmit()
-    Helper.testElementExist('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('Should call AddAccount with correct values', async () => {
@@ -190,7 +190,7 @@ describe('SignupComponent', () => {
     const mainError = screen.getByTestId('main-error')
     expect(mainError).toHaveTextContent(error.message)
 
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('Should call UpdateCurrentAccount on success', async () => {
