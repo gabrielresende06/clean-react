@@ -1,6 +1,6 @@
 import React from 'react'
 import Styles from './survey-list.scss'
-import { Footer, Logo } from '@/presentation/components'
+import { Footer, Header } from '@/presentation/components'
 
 type Props = {
 
@@ -9,15 +9,7 @@ type Props = {
 const SurveyList: React.FC<Props> = () => {
   return (
     <div className={Styles.surveyListWrap}>
-        <header className={Styles.headerWrap}>
-            <div className={Styles.headerContent}>
-                <Logo />
-                <div className={Styles.logoutWrap}>
-                    <span>Gabriel Resende</span>
-                    <a href="#">sair</a>
-                </div>
-            </div>
-        </header>
+        <Header />
         <div className={Styles.contentWrap}>
             <h2>Enquetes</h2>
             <ul>
