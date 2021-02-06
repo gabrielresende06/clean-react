@@ -56,7 +56,7 @@
   },
   "scripts": {
     "start": "webpack serve --open --port 3000",
-    "test": "jest --passWithNoTests --silent --no-cache --runInBand",
+    "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm test -- --watch",
     "test:verbose": "jest --passWithNoTests --no-cache --runInBand --verbose",
     "test:staged": "npm test -- --findRelatedTests",
