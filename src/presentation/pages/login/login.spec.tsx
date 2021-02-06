@@ -5,14 +5,14 @@ import faker from 'faker'
 import '@testing-library/jest-dom'
 import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { AuthenticationSpy, ValidationStub, SaveAccessTokenMock , Helper } from '@/presentation/test'
+import { AuthenticationSpy, ValidationStub, UpdateCurrentAccountMock , Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
-  saveAccessTokenMock: SaveAccessTokenMock
+  updateCurrentAccountMock: UpdateCurrentAccountMock
 }
 
 type SutParams = {
@@ -23,18 +23,18 @@ const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const updateCurrentAccountMock = new UpdateCurrentAccountMock()
   validationStub.errorMessage = params?.validationError
   const sut = render(
       <Router history={history}>
-        <Login validation={validationStub} authentication={authenticationSpy} saveAccessToken={saveAccessTokenMock} />
+        <Login validation={validationStub} authentication={authenticationSpy} updateCurrentAccount={updateCurrentAccountMock} />
       </Router>
   )
   return {
     sut,
     validationStub,
     authenticationSpy,
-    saveAccessTokenMock
+    updateCurrentAccountMock
   }
 }
 
@@ -158,7 +158,7 @@ describe('LoginComponent', () => {
   })
 
   test('Should call SaveAccessToken on success', async () => {
-    const { authenticationSpy, saveAccessTokenMock } = makeSut()
+    const { authenticationSpy, updateCurrentAccountMock } = makeSut()
 
     Helper.initializationInput('email')
     Helper.initializationInput('password')
@@ -166,7 +166,7 @@ describe('LoginComponent', () => {
     const submitButton = screen.getByTestId('submit')
     await fireEvent.click(submitButton)
 
-    expect(saveAccessTokenMock.accessToken).toBe(authenticationSpy.account.accessToken)
+    expect(updateCurrentAccountMock.account).toEqual(authenticationSpy.account)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
   })

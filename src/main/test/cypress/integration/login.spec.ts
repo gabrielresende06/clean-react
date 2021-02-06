@@ -67,13 +67,13 @@ describe('Login', () => {
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
-  it('should save AccessToken if valid credentials are provided', () => {
+  it('should save AccountModel if valid credentials are provided', () => {
     Http.mockOk()
     simulateValidSubmit()
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
     cy.url().should('eq', `${baseUrl}/`)
-    cy.window().then(window => { assert.isOk(window.localStorage.getItem('accessToken')) })
+    cy.window().then(window => { assert.isOk(window.localStorage.getItem('account')) })
   })
 
   it('should prevent multiple submit', () => {
