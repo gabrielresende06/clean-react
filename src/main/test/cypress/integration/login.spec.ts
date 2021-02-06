@@ -24,7 +24,7 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  it('should present error state if form is invalid', () => {
+  it('should present error state if api is invalid', () => {
     cy.getByTestId('email').focus().type(faker.random.word())
     testInputStatus('email', 'Valor inválido')
 
@@ -35,7 +35,7 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  it('should present valid state if form is valid', () => {
+  it('should present valid state if api is valid', () => {
     cy.getByTestId('email').focus().type(faker.internet.email())
     testInputStatus('email')
 
@@ -84,7 +84,7 @@ describe('Login', () => {
     cy.get('@request.all').should('have.length', 1)
   })
 
-  it('should not call submit if form is invalid', () => {
+  it('should not call submit if api is invalid', () => {
     Http.mockOk()
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
