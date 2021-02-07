@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from '@/presentation/pages/survey-list/components/survey-item/survey-item-styles.scss'
+import Styles from 'survey-item-styles.scss'
 import { Icon, IconName } from '@/presentation/components'
 
 type Props = {
