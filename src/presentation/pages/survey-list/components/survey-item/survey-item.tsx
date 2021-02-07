@@ -1,12 +1,12 @@
 import React from 'react'
-import Styles from 'survey-item-styles.scss'
+import Styles from './survey-item-styles.scss'
 import { Icon, IconName } from '@/presentation/components'
 
 type Props = {
 
 }
 
-const SurveyItem: React.FC<Props> = (props) => {
+const SurveyItem: React.FC<Props> = () => {
   return (
       <li className={Styles.surveyItemWrap}>
           <div className={Styles.surveyContent}>
