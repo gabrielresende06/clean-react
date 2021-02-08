@@ -2,7 +2,7 @@ import React from 'react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory } from 'history'
 import faker from 'faker'
-import { render, RenderResult, screen, fireEvent } from '@testing-library/react'
+import { render, RenderResult, screen, fireEvent, act } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub , Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
@@ -144,16 +144,18 @@ describe('LoginComponent', () => {
   })
 
   test('Should present error if Authentication fails', async () => {
-    const { authenticationSpy } = makeSut()
+    await act(async () => {
+      const { authenticationSpy } = makeSut()
+
+      jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(new InvalidCredentialsError()))
+
+      Helper.initializationInput('email')
+      Helper.initializationInput('password')
+
+      const submitButton = screen.getByTestId('submit')
+      await fireEvent.click(submitButton)
+    })
     const error = new InvalidCredentialsError()
-    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(new InvalidCredentialsError()))
-
-    Helper.initializationInput('email')
-    Helper.initializationInput('password')
-
-    const submitButton = screen.getByTestId('submit')
-    await fireEvent.click(submitButton)
-
     const mainError = screen.getByTestId('main-error')
     expect(mainError).toHaveTextContent(error.message)
     expect(screen.getByTestId('error-wrap').children).toHaveLength(1)

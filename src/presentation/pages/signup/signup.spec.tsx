@@ -1,7 +1,7 @@
 import React from 'react'
 import faker from 'faker'
 import '@testing-library/jest-dom'
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
+import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import { Signup } from '@/presentation/pages'
 import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
@@ -182,14 +182,15 @@ describe('SignupComponent', () => {
 
   test('Should present error if Authentication fails', async () => {
     const { addAccountSpy } = makeSut()
-    const error = new EmailInUseError()
+
     jest.spyOn(addAccountSpy, 'add').mockReturnValueOnce(Promise.reject(new EmailInUseError()))
+    await act(async () => {
+      await simulateValidSubmit(faker.name.findName(), faker.internet.email(), faker.internet.password())
+    })
 
-    await simulateValidSubmit(faker.name.findName(), faker.internet.email(), faker.internet.password())
-
+    const error = new EmailInUseError()
     const mainError = screen.getByTestId('main-error')
     expect(mainError).toHaveTextContent(error.message)
-
     expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
