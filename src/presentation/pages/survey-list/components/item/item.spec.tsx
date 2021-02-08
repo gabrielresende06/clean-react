@@ -2,10 +2,10 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { SurveyItem } from '@/presentation/pages/survey-list/components'
 import { mockSurveyModel } from '@/domain/test'
-import { SurveyModel } from '@/domain/models'
 import { IconName } from '@/presentation/components'
+import { LoadSurveyList } from '@/domain/usecases'
 
-const makeSut = (survey: SurveyModel): void => {
+const makeSut = (survey: LoadSurveyList.Model): void => {
   render(<SurveyItem survey={survey} />)
 }
 

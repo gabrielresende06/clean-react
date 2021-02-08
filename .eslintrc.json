@@ -27,6 +27,7 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/comma-spacing": "off",
     "@typescript-eslint/return-await": "off",
     "react/jsx-uses-react": 1,
@@ -35,6 +36,8 @@
     "cypress/no-unnecessary-waiting": "error",
     "cypress/assertion-before-screenshot": "warn",
     "cypress/no-force": "warn",
-    "cypress/no-async-tests": "error"
+    "cypress/no-async-tests": "error",
+    "no-declare": "off",
+    "import/export": "off"
   }
 }

@@ -7,13 +7,13 @@ import { Login } from '@/presentation/pages'
 import { AuthenticationSpy, ValidationStub , Helper } from '@/presentation/test'
 import { InvalidCredentialsError } from '@/domain/errors'
 import { ApiContext } from '@/presentation/contexts'
-import { AccountModel } from '@/domain/models'
+import { Authentication } from '@/domain/usecases'
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
-  setCurrentAccountMock: (account: AccountModel) => void
+  setCurrentAccountMock: (account: Authentication.Model) => void
 }
 
 type SutParams = {
