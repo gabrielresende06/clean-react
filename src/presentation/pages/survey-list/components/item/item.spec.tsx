@@ -9,7 +9,7 @@ const makeSut = (survey: SurveyModel): void => {
   render(<SurveyItem survey={survey} />)
 }
 
-describe('SurveyItem Component', () => {
+describe('Item Component', () => {
   test('Should render with correct values', () => {
     const survey = mockSurveyModel()
     survey.didAnswer = true

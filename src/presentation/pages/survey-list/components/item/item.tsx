@@ -1,5 +1,5 @@
 import React from 'react'
-import Styles from './survey-item-styles.scss'
+import Styles from './item-styles.scss'
 import { Icon, IconName } from '@/presentation/components'
 import { SurveyModel } from '@/domain/models'
 
@@ -7,7 +7,7 @@ type Props = {
   survey: SurveyModel
 }
 
-const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
+const Item: React.FC<Props> = ({ survey }: Props) => {
   const iconName = survey.didAnswer ? IconName.thumbUp : IconName.thumbDown
   return (
       <li className={Styles.surveyItemWrap}>
@@ -27,4 +27,4 @@ const SurveyItem: React.FC<Props> = ({ survey }: Props) => {
   )
 }
 
-export default SurveyItem
+export default Item
