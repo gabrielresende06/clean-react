@@ -60,13 +60,6 @@ describe('Login', () => {
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
-  it('should present unexpectedError if invalid data is returned', () => {
-    Http.mockInvalidData()
-    simulateValidSubmit()
-    testMainError('Algo de errado aconteceu. Tente novamente em breve.')
-    cy.url().should('eq', `${baseUrl}/login`)
-  })
-
   it('should save AccountModel if valid credentials are provided', () => {
     Http.mockOk()
     simulateValidSubmit()
