@@ -1,6 +1,11 @@
 import * as faker from 'faker'
-import { testInputStatus, testMainError } from '../support/form-helper'
-import * as Http from '../support/login-mocks'
+import { testInputStatus, testMainError } from '../utils/form-helper'
+import * as Http from '../utils/http-mocks'
+
+const path = /login/
+export const mockInvalidCredentialsError = (): void => Http.mockUnauthorizedError(path)
+export const mockUnexpectedError = (): void => Http.mockServerError(path, 'POST')
+export const mockOk = (): void => Http.mockOk(path, 'POST', 'fx:account')
 
 const baseUrl: string = Cypress.config().baseUrl
 
@@ -47,21 +52,21 @@ describe('Login', () => {
   })
 
   it('should present invalidCredentialsError on 401', () => {
-    Http.mockInvalidCredentialsError()
+    mockInvalidCredentialsError()
     simulateValidSubmit()
     testMainError('Credencias inválidas')
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
   it('should present unexpectedError on 400', () => {
-    Http.mockUnexpectedError()
+    mockUnexpectedError()
     simulateValidSubmit()
     testMainError('Algo de errado aconteceu. Tente novamente em breve.')
     cy.url().should('eq', `${baseUrl}/login`)
   })
 
   it('should save AccountModel if valid credentials are provided', () => {
-    Http.mockOk()
+    mockOk()
     simulateValidSubmit()
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
@@ -70,7 +75,7 @@ describe('Login', () => {
   })
 
   it('should prevent multiple submit', () => {
-    Http.mockOk()
+    mockOk()
     cy.getByTestId('email').focus().type(faker.internet.email())
     cy.getByTestId('password').focus().type(faker.internet.password(5))
     cy.getByTestId('submit').dblclick()
@@ -78,7 +83,7 @@ describe('Login', () => {
   })
 
   it('should not call submit if api is invalid', () => {
-    Http.mockOk()
+    mockOk()
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
     cy.get('@request.all').should('have.length', 0)

@@ -1,8 +1,13 @@
-import { testInputStatus, testMainError } from '../support/form-helper'
+import { testInputStatus, testMainError } from '../utils/form-helper'
 import faker from 'faker'
-import * as Http from '../support/signup-mocks'
+import * as Http from '../utils/http-mocks'
 
 const baseUrl: string = Cypress.config().baseUrl
+
+const path = /signup/
+export const mockEmailInUseError = (): void => Http.mockForbiddenError(path, 'POST')
+export const mockUnexpectedError = (): void => Http.mockServerError(path, 'POST')
+export const mockOk = (): void => Http.mockOk(path, 'POST', 'fx:account')
 
 const simulateValidSubmit = (): void => {
   cy.getByTestId('name').focus().type(faker.name.findName())
@@ -67,21 +72,21 @@ describe('SignUp', () => {
   })
 
   it('should present EmailInUseError on 403', () => {
-    Http.mockEmailInUseError()
+    mockEmailInUseError()
     simulateValidSubmit()
     testMainError('Esse e-mail já está em uso')
     cy.url().should('eq', `${baseUrl}/signup`)
   })
 
   it('should present unexpectedError on 400', () => {
-    Http.mockUnexpectedError()
+    mockUnexpectedError()
     simulateValidSubmit()
     testMainError('Algo de errado aconteceu. Tente novamente em breve.')
     cy.url().should('eq', `${baseUrl}/signup`)
   })
 
   it('should save AccountModel if valid credentials are provided', () => {
-    Http.mockOk()
+    mockOk()
     simulateValidSubmit()
     cy.getByTestId('main-error').should('not.exist')
     cy.getByTestId('spinner').should('not.exist')
@@ -90,7 +95,7 @@ describe('SignUp', () => {
   })
 
   it('should prevent multiple submit', () => {
-    Http.mockOk()
+    mockOk()
     cy.getByTestId('name').focus().type(faker.name.findName())
     cy.getByTestId('email').focus().type(faker.internet.email())
     const password = faker.internet.password(5)
@@ -101,7 +106,7 @@ describe('SignUp', () => {
   })
 
   it('should not call submit if api is invalid', () => {
-    Http.mockOk()
+    mockOk()
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
     cy.get('@request.all').should('have.length', 0)
