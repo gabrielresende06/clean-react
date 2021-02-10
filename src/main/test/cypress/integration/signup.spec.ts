@@ -109,7 +109,6 @@ describe('SignUp', () => {
   it('should not call submit if api is invalid', () => {
     mockOk()
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
-    cy.wait('@request')
     cy.get('@request.all').should('have.length', 0)
   })
 })
