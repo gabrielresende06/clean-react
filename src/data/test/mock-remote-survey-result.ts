@@ -8,17 +8,13 @@ export const mockRemoteSurveyResultModel = (): RemoteLoadSurveyResult.Model => (
     image: faker.internet.url(),
     answer: faker.random.words(),
     count: faker.random.number(),
-    percent: faker.random.number(100)
+    percent: faker.random.number(100),
+    isCurrentAccountAnswer: faker.random.boolean()
   },
   {
     answer: faker.random.words(),
     count: faker.random.number(),
-    percent: faker.random.number(100)
+    percent: faker.random.number(100),
+    isCurrentAccountAnswer: faker.random.boolean()
   }]
 })
-
-export const mockRemoteSurveyResultListModel = (): RemoteLoadSurveyResult.Model[] => ([
-  mockRemoteSurveyResultModel(),
-  mockRemoteSurveyResultModel(),
-  mockRemoteSurveyResultModel()
-])
