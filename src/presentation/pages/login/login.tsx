@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
-import { FormContext, ApiContext } from '@/presentation/contexts'
+import { ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
+import { loginState } from '@/presentation/pages/login/components'
 import Styles from './login-styles.scss'
 import { Authentication } from '@/domain/usecases'
+import { useRecoilState } from 'recoil'
 
 type Props = {
   validation: Validation
@@ -14,15 +16,7 @@ type Props = {
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   const history = useHistory()
   const { setCurrentAccount } = useContext(ApiContext)
-  const [state, setState] = useState({
-    isLoading: false,
-    isFormInvalid: true,
-    email: '',
-    password: '',
-    emailError: '',
-    passwordError: '',
-    mainError: ''
-  })
+  const [state, setState] = useRecoilState(loginState)
 
   const validate = (field: string): void => {
     const { email, password } = state
@@ -56,21 +50,19 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   return (
     <div className={Styles.loginWrap}>
         <Header />
-        <FormContext.Provider value={{ state, setState }}>
-            <form data-testid='form' className={Styles.form} onSubmit={handleSubmit}>
-                <h2>Login</h2>
+        <form data-testid='form' className={Styles.form} onSubmit={handleSubmit}>
+            <h2>Login</h2>
 
-                <Input type="email" name="email" placeholder="Digite seu e-mail" />
-                <Input type="password" name="password" placeholder="Digite sua senha" />
+            <Input type="email" name="email" placeholder="Digite seu e-mail" state={state} setState={setState} />
+            <Input type="password" name="password" placeholder="Digite sua senha" state={state} setState={setState} />
 
-                <button data-testid='submit' disabled={!!state.emailError || !!state.passwordError || state.isLoading} className={Styles.submit} type="submit">Entrar</button>
-                <Link data-testid='signup-link' to='/signup' className={Styles.link}>
-                    Criar Conta
-                </Link>
+            <button data-testid='submit' disabled={!!state.emailError || !!state.passwordError || state.isLoading} className={Styles.submit} type="submit">Entrar</button>
+            <Link data-testid='signup-link' to='/signup' className={Styles.link}>
+                Criar Conta
+            </Link>
 
-                <FormStatus />
-            </form>
-        </FormContext.Provider>
+            <FormStatus state={state} />
+        </form>
         <Footer />
     </div>
   )
