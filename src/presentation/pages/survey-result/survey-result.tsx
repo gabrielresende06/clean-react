@@ -34,7 +34,7 @@ const SurveyResult: React.FC<Props> = (props) => {
                 </li>
             </FlipMove>
             <button>Voltar</button>
-            { false && <Loading/>}
+            { true && <Loading/>}
         </div>
         <Footer />
     </div>
