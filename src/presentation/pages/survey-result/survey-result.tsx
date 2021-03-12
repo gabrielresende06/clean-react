@@ -12,7 +12,7 @@ const SurveyResult: React.FC<Props> = (props) => {
     <div className={Styles.surveyResultWrap}>
         <Header />
         <div className={Styles.contentWrap}>
-            { false &&
+            { true &&
                 <>
                     <hgroup>
                         <Calendar date={new Date()} className={Styles.calendarWrap} />
