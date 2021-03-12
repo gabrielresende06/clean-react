@@ -10,13 +10,13 @@ export const mockSurveyResultModel = (): LoadSurveyResult.Model => ({
       answer: faker.random.words(10),
       count: faker.random.number(),
       percent: faker.random.number(100),
-      isCurrentAccountAnswer: faker.random.boolean()
+      isCurrentAccountAnswer: true
     },
     {
       answer: faker.random.words(2),
       count: faker.random.number(),
       percent: faker.random.number(100),
-      isCurrentAccountAnswer: faker.random.boolean()
+      isCurrentAccountAnswer: false
     }
   ]
 })
