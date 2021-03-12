@@ -5,12 +5,13 @@ import { ApiContext } from '@/presentation/contexts'
 import {
   mockAccountModel,
   LoadSurveyResultSpy,
-  mockSurveyResultModel, LoadSurveyListSpy
+  mockSurveyResultModel
 } from '@/domain/test'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import { AccountModel } from '@/domain/models'
 import { Router } from 'react-router-dom'
+import * as faker from 'faker'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
@@ -21,7 +22,7 @@ type SutTypes = {
 const makeSut = (
   loadSurveyResultSpy: LoadSurveyResultSpy = new LoadSurveyResultSpy()
 ): SutTypes => {
-  const history = createMemoryHistory({ initialEntries: ['/'] })
+  const history = createMemoryHistory({ initialEntries: ['/', `/surveys/${faker.random.uuid()}`], initialIndex: 1 })
   const setCurrentAccountMock = jest.fn()
   render(
       <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }}>
@@ -107,7 +108,7 @@ describe('SurveyResult Component', () => {
     expect(history.location.pathname).toBe('/login')
   })
 
-  test('Should call LoadSurveyList on reload', async () => {
+  test('Should call LoadSurveyResult on reload', async () => {
     const loadSurveyResultSpy: LoadSurveyResultSpy = new LoadSurveyResultSpy()
     jest.spyOn(loadSurveyResultSpy, 'load').mockRejectedValueOnce(new UnexpectedError())
     makeSut(loadSurveyResultSpy)
@@ -115,5 +116,13 @@ describe('SurveyResult Component', () => {
     fireEvent.click(screen.getByTestId('reload'))
     expect(loadSurveyResultSpy.callsCount).toBe(1)
     await waitFor(() => screen.getByTestId('survey-result'))
+  })
+
+  test('Should go to LoadSurveyList on back button click', async () => {
+    const { history } = makeSut()
+    await waitFor(() => screen.getByTestId('survey-result'))
+
+    fireEvent.click(screen.getByTestId('back-button'))
+    expect(history.location.pathname).toBe('/')
   })
 })
