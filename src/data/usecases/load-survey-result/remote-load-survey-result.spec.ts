@@ -1,9 +1,8 @@
-import { RemoteLoadSurveyResult } from '@/data/usecases/load-survey-result/remote-load-survey-result'
-import * as faker from 'faker'
-import { HttpClientSpy } from '@/data/test'
+import { RemoteLoadSurveyResult } from '@/data/usecases'
+import { HttpClientSpy, mockRemoteSurveyResultModel } from '@/data/test'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors'
-import { mockRemoteSurveyResultModel } from '@/data/test/mock-remote-survey-result'
+import * as faker from 'faker'
 
 type SutTypes = {
   sut: RemoteLoadSurveyResult

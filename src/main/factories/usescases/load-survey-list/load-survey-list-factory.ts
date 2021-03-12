@@ -1,5 +1,5 @@
 import { makeApiUrl } from '@/main/factories/http/api-url-factory'
-import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
+import { RemoteLoadSurveyList } from '@/data/usecases'
 import { LoadSurveyList } from '@/domain/usecases'
 import { makeAuthorizeHttpClientDecorator } from '@/main/factories/usescases/authorize-http-client-decorator/authorize-http-client-decorator-factory'
 

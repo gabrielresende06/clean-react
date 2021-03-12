@@ -1,5 +1,5 @@
 import { HttpClientSpy } from '@/data/test'
-import { RemoteAddAccount } from '@/data/usecases/add-account/remote-add-account'
+import { RemoteAddAccount } from '@/data/usecases'
 import { mockAccountModel, mockAddAccountParams } from '@/domain/test'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { EmailInUseError, UnexpectedError } from '@/domain/errors'
