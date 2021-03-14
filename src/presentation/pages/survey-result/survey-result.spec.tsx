@@ -1,7 +1,6 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { SurveyResult } from '@/presentation/pages'
-import { ApiContext } from '@/presentation/contexts'
 import {
   mockAccountModel,
   LoadSurveyResultSpy,
@@ -13,6 +12,7 @@ import { AccountModel } from '@/domain/models'
 import { Router } from 'react-router-dom'
 import * as faker from 'faker'
 import { RecoilRoot } from 'recoil'
+import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
@@ -34,16 +34,15 @@ const makeSut = (
 ): SutTypes => {
   const history = createMemoryHistory({ initialEntries: ['/', `/surveys/${faker.random.uuid()}`], initialIndex: 1 })
   const setCurrentAccountMock = jest.fn()
+  const mockedState = { setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }
   render(
-      <RecoilRoot>
-        <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }}>
-          <Router history={history}>
-            <SurveyResult
-                loadSurveyResult={loadSurveyResultSpy}
-                saveSurveyResult={saveSurveyResultSpy} />
-          </Router>
-        </ApiContext.Provider>
-      </RecoilRoot>
+    <RecoilRoot initializeState={({ set }) => set(currentAccountState, mockedState)} >
+      <Router history={history}>
+        <SurveyResult
+            loadSurveyResult={loadSurveyResultSpy}
+            saveSurveyResult={saveSurveyResultSpy} />
+      </Router>
+    </RecoilRoot>
   )
   return {
     loadSurveyResultSpy,
