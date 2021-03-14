@@ -1,4 +1,4 @@
-import { RemoteLoadSurveyList } from '@/data/usecases/load-survey-list/remote-load-survey-list'
+import { RemoteLoadSurveyList } from '@/data/usecases'
 import * as faker from 'faker'
 
 export const mockRemoteSurveyModel = (): RemoteLoadSurveyList.Model => ({
