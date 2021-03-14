@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Authentication } from '@/domain/usecases'
 import { Footer, FormStatus, Input, LoginHeader as Header } from '@/presentation/components'
 import { ApiContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validation'
 import { loginState } from '@/presentation/pages/login/components'
 import Styles from './login-styles.scss'
-import { Authentication } from '@/domain/usecases'
+import React, { useContext, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 
 type Props = {
