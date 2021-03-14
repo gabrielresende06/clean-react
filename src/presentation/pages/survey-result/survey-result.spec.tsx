@@ -12,6 +12,7 @@ import { createMemoryHistory, MemoryHistory } from 'history'
 import { AccountModel } from '@/domain/models'
 import { Router } from 'react-router-dom'
 import * as faker from 'faker'
+import { RecoilRoot } from 'recoil'
 
 type SutTypes = {
   loadSurveyResultSpy: LoadSurveyResultSpy
@@ -34,13 +35,15 @@ const makeSut = (
   const history = createMemoryHistory({ initialEntries: ['/', `/surveys/${faker.random.uuid()}`], initialIndex: 1 })
   const setCurrentAccountMock = jest.fn()
   render(
-      <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }}>
-        <Router history={history}>
-          <SurveyResult
-              loadSurveyResult={loadSurveyResultSpy}
-              saveSurveyResult={saveSurveyResultSpy} />
-        </Router>
-      </ApiContext.Provider>
+      <RecoilRoot>
+        <ApiContext.Provider value={{ setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }}>
+          <Router history={history}>
+            <SurveyResult
+                loadSurveyResult={loadSurveyResultSpy}
+                saveSurveyResult={saveSurveyResultSpy} />
+          </Router>
+        </ApiContext.Provider>
+      </RecoilRoot>
   )
   return {
     loadSurveyResultSpy,
@@ -232,9 +235,10 @@ describe('SurveyResult Component', () => {
 
     await waitFor(() => screen.getByTestId('survey-result'))
     const answersWrap = screen.queryAllByTestId('answer-wrap')
-    fireEvent.click(answersWrap[1])
-    fireEvent.click(answersWrap[1])
 
+    fireEvent.click(answersWrap[1])
+    await waitFor(() => screen.getByTestId('survey-result'))
+    fireEvent.click(answersWrap[1])
     await waitFor(() => screen.getByTestId('survey-result'))
     expect(saveSurveyResultSpy.callsCount).toBe(1)
   })
