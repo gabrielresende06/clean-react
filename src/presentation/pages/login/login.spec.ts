@@ -1,18 +1,13 @@
-import React from 'react'
-import { Router } from 'react-router-dom'
-import { createMemoryHistory } from 'history'
-import faker from 'faker'
-import { render, RenderResult, screen, fireEvent, act } from '@testing-library/react'
 import { Login } from '@/presentation/pages'
-import { AuthenticationSpy, ValidationStub , Helper } from '@/presentation/test'
-import { InvalidCredentialsError } from '@/domain/errors'
 import { Authentication } from '@/domain/usecases'
-import { RecoilRoot } from 'recoil'
-import { currentAccountState } from '@/presentation/components'
-import { mockAccountModel } from '@/domain/test'
+import { InvalidCredentialsError } from '@/domain/errors'
+import { AuthenticationSpy, ValidationStub, Helper, renderWithHistory } from '@/presentation/test'
+
+import faker from 'faker'
+import { createMemoryHistory } from 'history'
+import { screen, fireEvent, act } from '@testing-library/react'
 
 type SutTypes = {
-  sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
   setCurrentAccountMock: (account: Authentication.Model) => void
@@ -26,18 +21,14 @@ const history = createMemoryHistory({ initialEntries: ['/login'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
-  const setCurrentAccountMock = jest.fn()
-  const mockedState = { setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }
   validationStub.errorMessage = params?.validationError
-  const sut = render(
-    <RecoilRoot initializeState={({ set }) => set(currentAccountState, mockedState)} >
-      <Router history={history}>
-        <Login validation={validationStub} authentication={authenticationSpy} />
-      </Router>
-    </RecoilRoot>
-  )
+
+  const { setCurrentAccountMock } = renderWithHistory({
+    Page: () => Login({ validation: validationStub, authentication: authenticationSpy }),
+    history
+  })
+
   return {
-    sut,
     validationStub,
     authenticationSpy,
     setCurrentAccountMock

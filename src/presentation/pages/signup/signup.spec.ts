@@ -1,19 +1,14 @@
-import React from 'react'
+import { Signup } from '@/presentation/pages'
+import { AddAccount } from '@/domain/usecases'
+import { EmailInUseError } from '@/domain/errors'
+import { Helper, ValidationStub, AddAccountSpy, renderWithHistory } from '@/presentation/test'
+
 import faker from 'faker'
 import '@testing-library/jest-dom'
-import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react'
-import { Signup } from '@/presentation/pages'
-import { Helper, ValidationStub, AddAccountSpy } from '@/presentation/test'
-import { EmailInUseError } from '@/domain/errors'
+import { act, fireEvent, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
-import { Router } from 'react-router-dom'
-import { AddAccount } from '@/domain/usecases'
-import { RecoilRoot } from 'recoil'
-import { mockAccountModel } from '@/domain/test'
-import { currentAccountState } from '@/presentation/components'
 
 type SutTypes = {
-  sut: RenderResult
   addAccountSpy: AddAccountSpy
   setCurrentAccountMock: (account: AddAccount.Model) => void
 }
@@ -25,18 +20,13 @@ const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const addAccountSpy = new AddAccountSpy()
-  const setCurrentAccountMock = jest.fn()
-  const mockedState = { setCurrentAccount: setCurrentAccountMock, getCurrentAccount: () => mockAccountModel() }
   validationStub.errorMessage = params?.validationError
-  const sut = render(
-    <RecoilRoot initializeState={({ set }) => set(currentAccountState, mockedState)} >
-      <Router history={history}>
-        <Signup validation={validationStub} addAccount={addAccountSpy} />
-      </Router>
-    </RecoilRoot>
-  )
+  const { setCurrentAccountMock } = renderWithHistory({
+    history,
+    Page: () => Signup({ validation: validationStub, addAccount: addAccountSpy })
+  })
+
   return {
-    sut,
     addAccountSpy,
     setCurrentAccountMock
   }

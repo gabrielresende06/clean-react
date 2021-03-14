@@ -1,7 +1,8 @@
+import Styles from './header-styles.scss'
 import { currentAccountState, Logo } from '@/presentation/components'
 import { useLogout } from '@/presentation/hooks'
+
 import React, { memo } from 'react'
-import Styles from './header-styles.scss'
 import { useRecoilValue } from 'recoil'
 
 const Header: React.FC = () => {
