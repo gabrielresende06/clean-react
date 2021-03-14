@@ -36,6 +36,14 @@ describe('SignUp', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
+  it('should reset state on page load', () => {
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    testInputStatus('email')
+    cy.getByTestId('login').click()
+    cy.getByTestId('signup-link').click()
+    testInputStatus('email', 'Campo obrigatório')
+  })
+
   it('should present error state if api is invalid', () => {
     cy.getByTestId('name').focus().type(faker.random.alphaNumeric(3))
     testInputStatus('name', 'Valor inválido')
